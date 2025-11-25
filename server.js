@@ -8,14 +8,12 @@ const app = express();
 const PORT= process.env.PORT || 4000;
 
 //middleware
-app.use(cors({origin:'http://localhost:5173'}));
+//app.use(cors({origin:'http://localhost:5173'}));
+app.use(cors());
 app.use(express.json());
 //MONGODB_URI=mongodb+srv://handymanUser:Robqw2RLiX1lZi24@handymancluster.mjcalxu.mongodb.net/?retryWrites=true&w=majority&appName=HandymanCluster
 //conect to mongoDB
-mongoose.connect(process.env.MONGODB_URI,{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-})
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('connected to mongoBD'))
 .catch(err => {
     console.error('mongoDB connection error:' , err);
