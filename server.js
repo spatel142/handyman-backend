@@ -48,7 +48,7 @@ const ServiceSchema = new Schema({
 const BookingSchema = new Schema({
     name: {type:String, required: true},
     email: String,
-    phone: String,
+    phone: Number,
     service:{type:Schema.Types.ObjectId, ref:'Service', required:true},
     date: Date,
     address: String,
