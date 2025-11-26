@@ -96,7 +96,8 @@ app.post('/api/bookings' , async (req,res) =>{
         const b = new Booking(req.body);
         await b.save();
 
-        const booking = await b.populate('service');
+       const booking = await Booking.findById(b._id).populate('service');
+
           console.log("📧 Attempting to send email...");
         //SEND EMAIL
         await transporter.sendMail({
@@ -107,7 +108,7 @@ app.post('/api/bookings' , async (req,res) =>{
             You got a new booking request from ${booking.name}
                 Email: ${booking.email}
                 Phone:${booking.phone}
-                Service:${booking?.service?.title|| booking?.service?.name || 'N/A'}
+                Service: ${booking.service ? booking.service.title : 'N/A'}
                 Description:${booking.notes}
                 Address:${booking.address}
               `,
