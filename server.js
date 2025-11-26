@@ -93,6 +93,10 @@ app.post('/api/services', async (req,res) =>{
 //Booking
 app.post('/api/bookings' , async (req,res) =>{
     try{
+        if (req.body.date && isNaN(Date.parse(req.body.date))) {
+    return res.status(400).json({ error: "Invalid date format" });
+}
+
         const b = new Booking(req.body);
         await b.save();
 
@@ -111,7 +115,7 @@ app.post('/api/bookings' , async (req,res) =>{
                 Service: ${booking.service ? booking.service.title : 'N/A'}
                 Description:${booking.notes}
                 Address:${booking.address}
-              `,
+                Date: ${booking.date} `,
                 
             
         });
