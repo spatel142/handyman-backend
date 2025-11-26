@@ -107,7 +107,7 @@ app.post('/api/bookings' , async (req,res) =>{
             You got a new booking request from ${booking.name}
                 Email: ${booking.email}
                 Phone:${booking.phone}
-                Service:${booking.service.title|| booking.service.name || 'N/A'}
+                Service:${booking?.service?.title|| booking?.service?.name || 'N/A'}
                 Description:${booking.notes}
                 Address:${booking.address}
               `,
