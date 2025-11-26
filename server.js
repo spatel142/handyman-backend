@@ -107,10 +107,10 @@ app.post('/api/bookings' , async (req,res) =>{
             You got a new booking request from ${booking.name}
                 Email: ${booking.email}
                 Phone:${booking.phone}
-                Service:${booking.service.title}
+                Service:${booking.service.title|| booking.service.name || 'N/A'}
                 Description:${booking.notes}
                 Address:${booking.address}
-                price:$${booking.service.price}`,
+              `,
                 
             
         });
@@ -140,3 +140,5 @@ app.post('/api/contact', async (req,res) =>{
 app.listen(PORT, () =>{
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+//https://handyman-backend-4esx.onrender.com/
