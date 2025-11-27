@@ -24,8 +24,9 @@ console.log("ADMIN_EMAIL_PASS:", process.env.ADMIN_PASS ? "Loaded ✅" : "❌ Mi
 //mail transporter
 const transporter = nodemailer.createTransport({
    host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+    secure: false,
+
     auth:{
         user:process.env.ADMIN_EMAIL,
         pass:process.env.ADMIN_PASS,
@@ -104,8 +105,9 @@ app.post('/api/bookings' , async (req,res) =>{
 
           console.log("📧 Attempting to send email...");
         //SEND EMAIL
-        await transporter.sendMail({
-            from:`"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
+        try {
+            const info = await transporter.sendMail({
+                 from:`"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
             to: process.env.ADMIN_EMAIL,
             subject:"New Service Request",
             text: `
@@ -117,8 +119,12 @@ app.post('/api/bookings' , async (req,res) =>{
                 Address:${booking.address}
                 Date: ${booking.date} `,
                 
-            
-        });
+            });
+            console.log("📧 Email sent:", info.response);
+        } catch (emailErr) {
+            console.log("❌ Email sending failed:", emailErr);
+        }
+
          console.log("✅ Email sent successfully");
         res.status(201).json(b);
     } catch(err){
