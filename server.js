@@ -88,10 +88,7 @@ app.post('/api/services', async (req,res) =>{
 
 //Booking
 app.post('/api/bookings' , async (req,res) =>{
-    try{
-        if (req.body.date && isNaN(Date.parse(req.body.date))) {
-    return res.status(400).json({ error: "Invalid date format" });
-}
+ 
 
         const b = new Booking(req.body);
         await b.save();
@@ -100,33 +97,39 @@ app.post('/api/bookings' , async (req,res) =>{
 
           console.log("📧 Attempting to send email...");
         //SEND EMAIL
-        try {
-            const info = await transporter.sendMail({
-                 from:`"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
-            to: process.env.ADMIN_EMAIL,
-            subject:"New Service Request",
-            text: `
-            You got a new booking request from ${booking.name}
+       try {
+            const mailOptions = {
+                from: `"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
+                to: process.env.ADMIN_EMAIL,
+                subject: "New Service Request",
+                text: `
+                You got a new booking request from ${booking.name}
                 Email: ${booking.email}
-                Phone:${booking.phone}
+                Phone: ${booking.phone}
                 Service: ${booking.service ? booking.service.title : 'N/A'}
-                Description:${booking.notes}
-                Address:${booking.address}
-                Date: ${booking.date} `,
-                
-            });
-           console.log("📧 Email accepted:", info.accepted);
-console.log("📧 Email rejected:", info.rejected);
+                Description: ${booking.notes}
+                Address: ${booking.address}
+                Date: ${booking.date}
+                `
+                };
+
+            console.log("📧 Attempting to send email...");
+
+            const info = await transporter.sendMail(mailOptions);
+                console.log("📬 Transporter ready:", transporter.options);
+
+            console.log("📧 Email accepted:", info.accepted);
+            console.log("📧 Email rejected:", info.rejected);
+            console.log("📧 Email response:", info.response);
 
         } catch (emailErr) {
             console.log("❌ Email sending failed:", emailErr);
         }
 
+
          console.log("✅ Email sent successfully");
-        res.status(201).json(b);
-    } catch(err){
-        res.status(400).json({ error: err.message});
-    }
+            res.status(201).json(b);
+    
 });
 
 
