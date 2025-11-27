@@ -23,18 +23,13 @@ console.log("ADMIN_EMAIL:", process.env.ADMIN_EMAIL);
 console.log("ADMIN_EMAIL_PASS:", process.env.ADMIN_PASS ? "Loaded ✅" : "❌ Missing");
 //mail transporter
 const transporter = nodemailer.createTransport({
-   host: "smtp.gmail.com",
-  port: 587,
-    secure: false,
-
-    auth:{
-        user:process.env.ADMIN_EMAIL,
-        pass:process.env.ADMIN_PASS,
-    },
-    tls: {
-    rejectUnauthorized: false   // 👈 allow self-signed certs
+  service: "gmail",
+  auth: {
+    user: process.env.ADMIN_EMAIL,
+    pass: process.env.ADMIN_PASS,  // 16-digit Gmail App Password
   }
 });
+
 
 /*--------Models-----------*/
 const { Schema, model} = mongoose;
