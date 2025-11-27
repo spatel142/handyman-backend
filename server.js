@@ -115,7 +115,9 @@ app.post('/api/bookings' , async (req,res) =>{
                 Date: ${booking.date} `,
                 
             });
-            console.log("📧 Email sent:", info.response);
+           console.log("📧 Email accepted:", info.accepted);
+console.log("📧 Email rejected:", info.rejected);
+
         } catch (emailErr) {
             console.log("❌ Email sending failed:", emailErr);
         }
