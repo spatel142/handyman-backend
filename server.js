@@ -93,14 +93,14 @@ app.post('/api/bookings' , async (req,res) =>{
         const b = new Booking(req.body);
         await b.save();
 
-       const booking = await Booking.findById(b._id).populate('service');
+        const booking = await Booking.findById(b._id).populate('service');
 
           console.log("📧 Attempting to send email...");
         //SEND EMAIL
        try {
             const mailOptions = {
                 from: `"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
-                to: process.env.ADMIN_EMAIL,
+                to: "handymanontario59@gmail.com",
                 subject: "New Service Request",
                 text: `
                 You got a new booking request from ${booking.name}
