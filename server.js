@@ -1,9 +1,11 @@
-require('dotenv').config();
+import dotenv from "dotenv";
+dotenv.config();
 import sgMail from "@sendgrid/mail";
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const nodemailer = require("nodemailer");
+
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+
 
 const app = express();
 const PORT= process.env.PORT || 5000;
