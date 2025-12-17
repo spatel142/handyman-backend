@@ -97,7 +97,7 @@ app.post('/api/bookings' , async (req,res) =>{
           console.log("📧 Attempting to send email...");
           sgMail.setApiKey(process.env.SENDGRID_API_KEY);
             const mailOptions = {
-                from: `"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
+                from: process.env.ADMIN_EMAIL,
                 to: process.env.ADMIN_EMAIL,
                 subject: "New Service Request",
                 text: `
