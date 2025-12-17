@@ -123,10 +123,7 @@ Date: ${booking.date}
     `,
   });
 
-              
-
-            console.log("📧 Email accepted:", info.accepted);
-           
+        
 
         } catch (emailErr) {
             console.log("❌ Email sending failed:", emailErr);
