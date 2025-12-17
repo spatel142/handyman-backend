@@ -91,13 +91,13 @@ app.post('/api/bookings' , async (req,res) =>{
 
         const booking = await Booking.findById(b._id).populate('service');
 
-        
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         //SEND EMAIL
        try {
           console.log("📧 Attempting to send email...");
-          sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+          
             const mailOptions = {
-                from: process.env.ADMIN_EMAIL,
+                from: `"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
                 to: process.env.ADMIN_EMAIL,
                 subject: "New Service Request",
                 text: `
@@ -110,11 +110,8 @@ app.post('/api/bookings' , async (req,res) =>{
                 Date: ${booking.date}
                 `
                 };
-
-          
-
-            const info = await sgMail.send(mailOptions);
-                console.log("📬 Transporter ready:", transporter.options);
+              const info = await sgMail.send(mailOptions);
+              
 
             console.log("📧 Email accepted:", info.accepted);
            
