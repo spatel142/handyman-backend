@@ -1,4 +1,5 @@
 require('dotenv').config();
+import sgMail from "@sendgrid/mail";
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -99,6 +100,7 @@ app.post('/api/bookings' , async (req,res) =>{
         //SEND EMAIL
        try {
           console.log("📧 Attempting to send email...");
+          sgMail.setApiKey(process.env.SENDGRID_API_KEY);
             const mailOptions = {
                 from: `"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
                 to: process.env.ADMIN_EMAIL,
@@ -116,7 +118,7 @@ app.post('/api/bookings' , async (req,res) =>{
 
           
 
-            const info = await transporter.sendMail(mailOptions);
+            const info = await sgMail.send(mailOptions);
                 console.log("📬 Transporter ready:", transporter.options);
 
             console.log("📧 Email accepted:", info.accepted);
