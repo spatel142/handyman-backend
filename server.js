@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import sgMail from "@sendgrid/mail";
+import SibApiV3Sdk from "sib-api-v3-sdk";
 
 import express from "express";
 import mongoose from "mongoose";
@@ -91,26 +91,38 @@ app.post('/api/bookings' , async (req,res) =>{
 
         const booking = await Booking.findById(b._id).populate('service');
 
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        const client = SibApiV3Sdk.ApiClient.instance;
+            client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
+
+            const tranEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
         //SEND EMAIL
        try {
           console.log("📧 Attempting to send email...");
           
-            const mailOptions = {
-                from: `"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
-                to: process.env.ADMIN_EMAIL,
-                subject: "New Service Request",
-                text: `
-                You got a new booking request from ${booking.name}
-                Email: ${booking.email}
-                Phone: ${booking.phone}
-                Service: ${booking.service ? booking.service.title : 'N/A'}
-                Description: ${booking.notes}
-                Address: ${booking.address}
-                Date: ${booking.date}
-                `
-                };
-              const info = await sgMail.send(mailOptions);
+             await tranEmailApi.sendTransacEmail({
+    sender: {
+      email: "handymanontario59@gmail.com", // VERIFIED sender
+      name: "Handyman Services",
+    },
+    to: [
+      {
+        email: "handymanontario59@gmail.com",
+        name: "Admin",
+      },
+    ],
+    subject: "New Service Request",
+    textContent: `
+New booking received
+
+Name: ${booking.name}
+Email: ${booking.email}
+Phone: ${booking.phone}
+Service: ${booking.service?.title || "N/A"}
+Address: ${booking.address}
+Date: ${booking.date}
+    `,
+  });
+
               
 
             console.log("📧 Email accepted:", info.accepted);
