@@ -95,12 +95,13 @@ app.post('/api/bookings' , async (req,res) =>{
 
         const booking = await Booking.findById(b._id).populate('service');
 
-          console.log("📧 Attempting to send email...");
+        
         //SEND EMAIL
        try {
+          console.log("📧 Attempting to send email...");
             const mailOptions = {
                 from: `"Handyman Services" <${process.env.ADMIN_EMAIL}>`,
-                to: "handymanontario59@gmail.com",
+                to: process.env.ADMIN_EMAIL,
                 subject: "New Service Request",
                 text: `
                 You got a new booking request from ${booking.name}
@@ -113,14 +114,13 @@ app.post('/api/bookings' , async (req,res) =>{
                 `
                 };
 
-            console.log("📧 Attempting to send email...");
+          
 
             const info = await transporter.sendMail(mailOptions);
                 console.log("📬 Transporter ready:", transporter.options);
 
             console.log("📧 Email accepted:", info.accepted);
-            console.log("📧 Email rejected:", info.rejected);
-            console.log("📧 Email response:", info.response);
+           
 
         } catch (emailErr) {
             console.log("❌ Email sending failed:", emailErr);
